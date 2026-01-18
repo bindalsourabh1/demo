@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.controller.TaskController;
+import com.example.demo.dto.TaskDto;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.service.TaskService;
 import org.junit.jupiter.api.Test;
@@ -30,5 +31,17 @@ class TaskControllerTest {
 
         mockMvc.perform(get("/tasks/101/Task-1"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void getTaskById_returns200_whenTaskExists() throws Exception{
+        TaskDto dto = new TaskDto();
+        dto.setTaskId("Task1");
+        dto.setTitle("Learn Spring");
+        dto.setDescription("Understand MVC issues");
+        when(taskService.getTaskByIdAndUserId("101", "Task1")).
+                thenReturn(dto);
+        mockMvc.perform(get("/tasks/101/Task1"))
+                .andExpect(status().isOk());
     }
 }
